@@ -20,17 +20,10 @@ export default class SearchScreen extends Component {
     };
   }
 
-  /* A função componentDidMount é um método de ciclo de vida
-   em componentes React que é executado após o componente ter sido montado
-   Adicione esse método abaixo: */
   componentDidMount = async () => {
-    /*Ao chamar getTransactions() dentro de componentDidMount, o componente garante que a função é executada assim que o componente é montado na tela, ou seja,
-     as informações são buscadas imediatamente quando o componente é exibido para o usuário. 
-     Chame essa função abaixo:*/
     this.getTransactions();
   };
-/*A função getTransactions é usada para obter as transações da coleção "transactions" do banco de dados Firebase.
-Como você poderia criar a função ' getTransactions' e obter a coleção 'transactions'? */
+
        
 getTransactions =()=> { 
     db.colletction('transactions')
@@ -39,14 +32,7 @@ getTransactions =()=> {
       .then(snapshot => {
         snapshot.docs.map(doc => {
           this.setState({
-            /* Cada vez que um documento é processado, suas informações são adicionadas ao array allTransactions.
 
-            'lastVisibleTransaction' é usada como ponto de referência para a próxima consulta do banco de dados. 
-            A cada iteração da função getTransactions, a referência 'lastVisibleTransaction' é atualizada com o
-             último documento recuperado, para que a próxima consulta comece a partir da última transação.
-             Adicione essa propriedade abaixo:
-            */
-           
                allTransactions: [this.state.allTransactions, doc.data()],
             LastVisibleTransaction: doc
           });
@@ -55,15 +41,13 @@ getTransactions =()=> {
   };
 
    handleSearch = async text => {
-    /* o texto de pesquisa é convertido para letras maiúsculas e, em seguida, dividido em um array de caracteres 
-    Como você poderia fazer isso? */
+    
     var enteredText =text.toUpperCase ().split('');
 
     this.setState({
       allTransactions: []
     });
-    /*Se o texto de pesquisa estiver vazio, ou seja, se o usuário não inseriu nada, a função getTransactions é chamada.
-    Faça isso abaixo: */
+
      if (!text) {
        this.getTransactions
      }
@@ -73,43 +57,48 @@ getTransactions =()=> {
       .toString()
       .split(" ")
       .splice(0, 4)
-      .join(""); // Resto do código };
+      .join(""); 
 
       var transactionType = item.transaction_type === 'issue' ? 'issued' : 'returned';
      
-       return (
-         <View style= {{borderWidth: 1}}>
-           <ListItem key= {i}bottomDivider>
-            <Icon type= {antdesigner}name= {'book'}size= {40}>
-             <ListItem.Content>
-               <ListItem.Title style= {style.TitleStyle}>
-                {`$ {item.book_name} ($ {item.book_id})`}
-                </ListItem.Title>
-                <ListItem.Subtitle style= {style.Subtitle}>
-                 {`This book ${transactionType} by ${item.student_name}`}
-                 <View style= {styles.lowerLeftContainer}>
-                 <View style= {styles.transactionContainer}>
-                   <Text style={[styles.transactionText, {
-                     color: item.transaction_type === 'issue' ? "#78D304" : "#0364F4"
-                   }
-                  ]}
+      return (
+      <View style={{ borderWidth: 1 }}>
+        <ListItem key={i} bottomDivider>
+          <Icon type="antdesign" name="book" size={40} />
+          <ListItem.Content>
+            <ListItem.Title style={styles.TitleStyle}>
+              {`${item.book_name} (${item.book_id})`}
+            </ListItem.Title>
+            <ListItem.Subtitle style={styles.Subtitle}>
+              {`This book ${transactionType} by ${item.student_name}`}
+              <View style={styles.lowerLeftContainer}>
+                <View style={styles.transactionContainer}>
+                  <Text
+                    style={[
+                      styles.transactionText,
+                      {
+                        color:
+                          item.transaction_type === 'issue'
+                            ? "#78D304"
+                            : "#0364F4"
+                      }
+                    ]}
                   >
-                    {item.transaction_type.charAt(0).toUpperCase() + 
-                    item.transaction_type.slice(1)}
-                  </Text>
-                </ListItem.Subtitle>
-                <View>
-                  <Text style= {style.date}>
-                    {date}
+                    {item.transaction_type.charAt(0).toUpperCase() +
+                      item.transaction_type.slice(1)}
                   </Text>
                 </View>
-             </ListItem.Content>
-           </ListItem>
-         </View>
-       )
-     }
-   }
-  } 
+              </View>
+            </ListItem.Subtitle>
+            <View>
+              <Text style={styles.date}>{date}</Text>
+            </View>
+          </ListItem.Content>
+        </ListItem>
+      </View>
+    );
+  };
+}
  const style = StyleSheet.create ({
  TitleStyle: {
    fontSize: 20,
